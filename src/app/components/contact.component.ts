@@ -5,8 +5,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-contact',
   standalone: true,
   imports: [CommonModule],
-  template: ` <section id="contact" class="p-52 overflow-hidden relative z-10">
-    <header class="text-center mx-auto mb-12 lg:px-20">
+  template: ` <section class="p-52 overflow-hidden relative z-10">
+    <header class="text-center mx-auto mb-12 lg:px-20" id="contact">
       <h2 class="text-3xl leading-normal mb-2 font-bold text-[#00cccc]">
         Alguna inquietud?
       </h2>

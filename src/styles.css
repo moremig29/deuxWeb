@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hero {
+  background-image: url('./assets/img/wave.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
