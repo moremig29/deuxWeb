@@ -1,10 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MessagesService } from '../services/messages.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Message } from '../interfaces/message.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: ` <section class="p-52 overflow-hidden relative z-10">
     <header class="text-center mx-auto mb-12 lg:px-20" id="contact">
       <h2 class="text-3xl leading-normal mb-2 font-bold text-[#00cccc]">
@@ -223,11 +227,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
         <div class="w-full lg:w-1/2 xl:w-5/12 px-4">
           <div class="bg-white relative rounded-lg p-8 sm:p-12 shadow-lg">
-            <form>
+            <form (submit)="postMessage()" [formGroup]="formMessage">
               <div class="mb-6">
                 <input
                   type="text"
                   placeholder="Nombre"
+                  formControlName="name"
                   class="
                         w-full
                         rounded
@@ -245,6 +250,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
                 <input
                   type="email"
                   placeholder="Correo electrónico"
+                  formControlName="email"
                   class="
                         w-full
                         rounded
@@ -262,6 +268,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
                 <input
                   type="text"
                   placeholder="Telefono"
+                  formControlName="phone"
                   class="
                         w-full
                         rounded
@@ -279,6 +286,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
                 <textarea
                   rows="4"
                   placeholder="Mensaje"
+                  formControlName="message"
                   class="
                         w-full
                         rounded
@@ -1131,4 +1139,45 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent {}
+export class ContactComponent {
+  sendMessage: Message = {
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+  };
+
+  public formMessage: FormGroup = this.fb.group({
+    name: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', Validators.required],
+    message: ['', Validators.required],
+  });
+
+  constructor(
+    public messagesService: MessagesService,
+    private fb: FormBuilder
+  ) {}
+
+  postMessage() {
+    console.log(this.formMessage.value);
+    console.log(this.formMessage.valid);
+    if (this.formMessage.valid) {
+      this.messagesService.postMessage(this.formMessage.value).subscribe({
+        next: (data: any) => {
+          Swal.fire({
+            title: `Hola ${this.formMessage.get('name')?.value}`,
+            text: 'Hemos recibido tu mensaje, te contactaremos en muy poco tiempo!!!',
+            icon: 'success',
+          });
+          this.formMessage.reset(this.sendMessage);
+        },
+        error: () => {},
+      });
+    } else {
+      this.showErrors();
+    }
+  }
+
+  showErrors() {}
+}
