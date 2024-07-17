@@ -13,7 +13,7 @@ export class MessagesService {
   get headers() {
     return {
       headers: {
-        'x-api-key': this.apikey,
+        'X-Api-Key': this.apikey,
       },
     };
   }

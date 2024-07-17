@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MessagesService } from '../services/messages.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Message } from '../interfaces/message.interface';
+import { Message } from '../interfaces/Message.interface';
 import Swal from 'sweetalert2';
 
 @Component({
